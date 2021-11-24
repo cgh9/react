@@ -5,21 +5,23 @@ import './tictactoe.css';
 
 
 class Square extends React.Component {
+  //value={this.state.squares[i]}
+  //onClick={() => this.handleClick(i)}
+  //클라스에서 this  인스턴스
   constructor(props) {
     super(props);
     this.state = {
-      value: 'ㅇ',
+      value: null,
     }
   }
   render() {
     return (
       <button className="square" onClick={() => {
-        this.setState({ value: 'x' })
-        alert(this.props.value)
-
+        this.props.onClick()
+        console.log(this.props.value)
       }
       } >
-        {this.state.value}
+        {this.props.value}
       </button>
     );
 
@@ -27,8 +29,28 @@ class Square extends React.Component {
 }
 
 class Board extends React.Component {
+  //constructor  인스턴스 객체 생성, 초기화 메서드
+  constructor(props) {
+    //부모 클래스 호출할려면 super() 로 호출 , 
+    super(props);//부모클래스 props 없어도 this 사용하기전에 super() 반드시 호출
+    this.state = {//this state 객체 생성 
+      squares: Array(9).fill(null),// squares 키 값에  배열 초기화 
+    }
+  }
+
+  handleClick(i) {
+    const squares = this.state.squares.slice();
+    console.log('squares1', squares)
+    console.log(`squares[${i}]`, squares[i])
+    squares[i] = 'X';
+    console.log('squares2', squares)
+    this.setState({ squares: squares })
+  }
+
   renderSquare(i) {
-    return <Square value={i} />;
+    return <Square value={this.state.squares[i]}
+      onClick={() => this.handleClick(i)}
+    />;
   }
 
   render() {
@@ -38,7 +60,7 @@ class Board extends React.Component {
       <div>
         <div className="status">{status}</div>
         <div className="board-row">
-          {this.renderSquare(0)}
+          {this.renderSquare(0)}          {/*renderSquare 함수 호출  */}
           {this.renderSquare(1)}
           {this.renderSquare(2)}
         </div>
